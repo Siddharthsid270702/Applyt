@@ -1,0 +1,32 @@
+.wrapper { display: flex; flex-direction: column; gap: 8px; }
+.empty { font-size: 0.78rem; color: var(--text3); }
+
+.noteCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand-teal);
+  border-radius: 8px; padding: 10px 14px;
+}
+.noteText { font-size: 0.83rem; color: var(--text2); line-height: 1.5; }
+.noteDate {
+  display: block; font-size: 0.7rem; color: var(--text3);
+  font-family: var(--mono); margin-top: 5px;
+}
+
+.input {
+  width: 100%; background: var(--card);
+  border: 1px solid var(--border2); border-radius: 8px;
+  padding: 9px 12px; color: var(--text); font-size: 0.82rem;
+  outline: none; resize: none; transition: border-color 0.15s; line-height: 1.5;
+}
+.input::placeholder { color: var(--text3); }
+.input:focus { border-color: var(--accent); }
+
+.btn {
+  background: var(--brand-grad); color: #fff; border: none;
+  border-radius: 8px; padding: 7px 16px;
+  font-size: 0.8rem; font-weight: 700;
+  cursor: pointer; align-self: flex-start; transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.85; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }

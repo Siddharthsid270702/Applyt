@@ -1,0 +1,81 @@
+.wrapper { display: flex; flex-direction: column; }
+
+.panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+
+.panelHeader {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.panelTitle { font-size: 0.88rem; font-weight: 700; }
+
+.search {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 7px; padding: 6px 12px;
+  color: var(--text); font-size: 0.8rem; width: 180px; outline: none;
+  transition: border-color 0.15s;
+}
+.search::placeholder { color: var(--text3); }
+.search:focus { border-color: var(--accent); }
+
+.filterTabs { display: flex; gap: 3px; margin-left: auto; }
+
+.filterTab {
+  padding: 5px 11px; border-radius: 6px;
+  font-size: 0.73rem; font-weight: 600; cursor: pointer;
+  color: var(--text3); background: transparent;
+  border: 1px solid transparent; transition: all 0.15s;
+}
+.filterTab:hover { color: var(--text2); }
+.filterTab.active {
+  background: var(--accent-glow); color: var(--accent);
+  border-color: var(--accent);
+}
+
+.table { width: 100%; border-collapse: collapse; }
+.table th {
+  text-align: left; font-size: 0.68rem; font-weight: 700;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
+.table td {
+  padding: 13px 14px; border-bottom: 1px solid var(--border);
+  font-size: 0.84rem; vertical-align: middle;
+}
+.row { transition: background 0.12s; cursor: pointer; }
+.row:hover { background: var(--card2); }
+.row:last-child td { border-bottom: none; }
+
+.companyCell { display: flex; align-items: center; gap: 11px; }
+
+.coLogo {
+  width: 34px; height: 34px; min-width: 34px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 800; color: #fff;
+}
+
+.coName { font-weight: 700; font-size: 0.87rem; }
+.coRole { font-size: 0.74rem; color: var(--text2); margin-top: 1px; }
+
+.sourceTag {
+  font-size: 0.71rem; color: var(--text3);
+  background: var(--card2); border-radius: 4px;
+  padding: 2px 8px; font-family: var(--mono);
+}
+.dateCell { font-size: 0.77rem; color: var(--text2); font-family: var(--mono); }
+
+.actionBtns { display: flex; gap: 6px; }
+.btnSm {
+  padding: 5px 10px; border-radius: 6px;
+  font-size: 0.71rem; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border2); background: var(--card2); color: var(--text2);
+  transition: all 0.15s;
+}
+.btnSm:hover { color: var(--accent); border-color: var(--accent); }
+.btnSm.danger:hover { color: var(--red); border-color: var(--red); }
+
+.empty { text-align: center; padding: 48px; color: var(--text3); font-size: 0.85rem; }
+.emptyIcon { font-size: 2.5rem; margin-bottom: 10px; }

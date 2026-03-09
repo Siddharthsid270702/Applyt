@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Tracker – Bug Fixes & Deployment Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;600;700&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --accent: #7c6aff;
+    --accent2: #38d9a9;
+    --accent3: #ff7675;
+    --accent4: #ffd166;
+    --text: #e2e8f0;
+    --text-muted: #8892aa;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding: 40px;
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px;
+    height: 120px;
+    background: radial-gradient(ellipse at center, #7c6aff22 0%, transparent 70%);
+  }
+  header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--text-muted); font-size: 0.95rem; }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-red { background: #ff767520; color: var(--accent3); border: 1px solid #ff767540; }
+  .badge-green { background: #38d9a920; color: var(--accent2); border: 1px solid #38d9a940; }
+  .badge-yellow { background: #ffd16620; color: var(--accent4); border: 1px solid #ffd16640; }
+  .badge-purple { background: #7c6aff20; color: var(--accent); border: 1px solid #7c6aff40; }
+
+  section { margin-bottom: 40px; }
+
+  .section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title .icon {
+    width: 30px; height: 30px;
+    background: var(--surface2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+
+  .bug-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border-left: 3px solid var(--accent3);
+    transition: border-color 0.2s;
+  }
+  .bug-card.fixed { border-left-color: var(--accent2); }
+  .bug-card h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .bug-card p { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+  .bug-card code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    background: var(--surface2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--accent4);
+  }
+
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+  }
+  .step-num {
+    width: 36px; height: 36px; min-width: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1rem;
+  }
+  .step-content h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+  .step-content p { font-size: 0.85rem; color: var(--text-muted); }
+  .step-content a { color: var(--accent); text-decoration: none; }
+  .step-content a:hover { text-decoration: underline; }
+
+  .cmd-block {
+    background: #0a0c14;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #a8ff78;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .cmd-block .comment { color: var(--text-muted); }
+  .cmd-block .env-var { color: var(--accent4); }
+
+  .platform-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .platform-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .platform-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .platform-card .tag { font-size: 0.7rem; }
+  .platform-card p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px; }
+  .platform-card ul { list-style: none; padding: 0; }
+  .platform-card li { font-size: 0.82rem; padding: 3px 0; color: var(--text-muted); }
+  .platform-card li::before { content: '→ '; color: var(--accent2); }
+
+  .arch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .arch-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .arch-box span { display: block; font-size: 0.7rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+  .arch-arrow { color: var(--accent); font-size: 1.2rem; }
+
+  .file-tree {
+    background: #0a0c14;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+  }
+  .file-tree .folder { color: var(--accent4); }
+  .file-tree .file { color: var(--text); }
+  .file-tree .new { color: var(--accent2); }
+  .file-tree .fixed-f { color: var(--accent3); }
+
+  @media (max-width: 600px) {
+    .platform-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>🚀 Job Application Tracker<br><span>Bug Fixes & Free Deployment Guide</span></h1>
+    <p>FastAPI + PostgreSQL + React → Deployed for free on Render + Neon + Vercel</p>
+  </header>
+
+  <!-- BUG FIXES -->
+  <section>
+    <div class="section-title">
+      <div class="icon">🐛</div>
+      Bugs Found & Fixed
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-red">Critical</span> Route Ordering Bug — <code>/archived</code> unreachable</h3>
+      <p>The <code>GET /applications/archived</code> route was defined AFTER <code>/{app_id}</code>, so FastAPI matched "archived" as an integer app_id and threw a 422 error. Fixed by moving archived routes before dynamic routes.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-red">Critical</span> Scheduler queried non-existent field</h3>
+      <p><code>Application.followup_due_date</code> doesn't exist on the model — this would crash at runtime. Fixed to query the <code>FollowUp</code> table correctly for unsent follow-ups.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-red">Critical</span> Missing exports in <code>api.js</code></h3>
+      <p><code>getArchivedApplications</code> and <code>restoreApplication</code> were used in <code>ArchivedApplications.jsx</code> but never exported from <code>api.js</code> — would throw a runtime error.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-red">Critical</span> <code>App.jsx</code> never rendered the lists</h3>
+      <p>The original <code>App.jsx</code> only rendered <code>Dashboard</code> which only showed the form. <code>ApplicationList</code> and <code>ArchivedApplications</code> were built but never connected to the UI.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-yellow">Bug</span> Hardcoded credentials in <code>database.py</code></h3>
+      <p>MySQL password <code>jarvis</code> was hardcoded. Fixed to use <code>DATABASE_URL</code> environment variable. Also migrated MySQL → PostgreSQL for free cloud hosting.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-yellow">Bug</span> Archive always stored "Application Withdrawn"</h3>
+      <p><code>archive_application()</code> hardcoded the status to "Application Withdrawn" regardless of actual status. Fixed to preserve the real application status at time of archiving.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-yellow">Bug</span> <code>FollowUpOut.sent_at</code> missing default</h3>
+      <p>Pydantic schema had <code>sent_at: Optional[datetime]</code> without <code>= None</code>, causing validation errors when returning unsent follow-ups where <code>sent_at</code> is NULL.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-yellow">Bug</span> No 404s for notes/followups on invalid app IDs</h3>
+      <p>Adding notes or follow-ups to a non-existent application silently failed or caused a DB constraint error. Fixed with explicit app existence check returning 404.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-purple">Improvement</span> Scheduler started at module import time</h3>
+      <p>The scheduler ran <code>scheduler.start()</code> at import time, which causes issues in production WSGI/ASGI environments. Fixed to start via FastAPI's <code>@app.on_event("startup")</code>.</p>
+    </div>
+
+    <div class="bug-card fixed">
+      <h3><span class="badge badge-purple">Improvement</span> Hardcoded CORS & API base URL</h3>
+      <p>Frontend used hardcoded <code>http://127.0.0.1:8000</code> and backend only allowed <code>localhost:5173</code>. Both now read from environment variables for production.</p>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section>
+    <div class="section-title">
+      <div class="icon">🏗</div>
+      Free Hosting Architecture
+    </div>
+    <div class="arch-row">
+      <div class="arch-box">Vercel<span>Frontend (React)</span></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Render.com<span>Backend (FastAPI)</span></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Neon.tech<span>PostgreSQL DB</span></div>
+    </div>
+  </section>
+
+  <!-- FREE PLATFORMS -->
+  <section>
+    <div class="section-title">
+      <div class="icon">☁️</div>
+      Free Platforms Guide
+    </div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <h3>🗄 Neon.tech <span class="badge badge-green tag">DB — Recommended</span></h3>
+        <p>Free PostgreSQL with 10GB storage. Serverless, auto-scales to zero.</p>
+        <ul>
+          <li>Sign up at <strong>neon.tech</strong></li>
+          <li>Create a new project → copy connection string</li>
+          <li>Paste as <code>DATABASE_URL</code> in Render</li>
+          <li>Free tier: 10GB, no credit card needed</li>
+        </ul>
+      </div>
+      <div class="platform-card">
+        <h3>🗄 Supabase <span class="badge badge-green tag">DB — Alternative</span></h3>
+        <p>Free PostgreSQL with 500MB storage + nice dashboard.</p>
+        <ul>
+          <li>Sign up at <strong>supabase.com</strong></li>
+          <li>New project → Settings → Database → Connection String</li>
+          <li>Use "URI" format for SQLAlchemy</li>
+          <li>Free tier: 500MB, pauses after inactivity</li>
+        </ul>
+      </div>
+      <div class="platform-card">
+        <h3>⚙️ Render.com <span class="badge badge-purple tag">Backend</span></h3>
+        <p>Free Python/FastAPI hosting. Sleeps after 15min inactivity (free tier).</p>
+        <ul>
+          <li>Sign up at <strong>render.com</strong></li>
+          <li>New Web Service → connect GitHub repo</li>
+          <li>Root dir: <code>backend/</code></li>
+          <li>Build: <code>pip install -r requirements.txt</code></li>
+          <li>Start: <code>uvicorn main:app --host 0.0.0.0 --port $PORT</code></li>
+          <li>Add <code>DATABASE_URL</code> + <code>ALLOWED_ORIGINS</code> as env vars</li>
+        </ul>
+      </div>
+      <div class="platform-card">
+        <h3>⚡ Vercel <span class="badge badge-yellow tag">Frontend</span></h3>
+        <p>Best free React/Vite hosting. Instant deploys from GitHub.</p>
+        <ul>
+          <li>Sign up at <strong>vercel.com</strong></li>
+          <li>Import GitHub repo → set root to <code>frontend/</code></li>
+          <li>Framework: Vite</li>
+          <li>Add env var: <code>VITE_API_URL</code> = your Render URL</li>
+          <li>Deploy — get a <code>*.vercel.app</code> URL instantly</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPLOYMENT STEPS -->
+  <section>
+    <div class="section-title">
+      <div class="icon">📋</div>
+      Step-by-Step Deployment
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Push your code to GitHub</h3>
+        <p>Create a new GitHub repo and push the <code>app-tracker/</code> folder. Both Vercel and Render will deploy from there automatically.</p>
+        <div class="cmd-block"><span class="comment"># In the app-tracker folder:</span>
+git init
+git add .
+git commit -m "initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/app-tracker.git
+git push -u origin main</div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Create free PostgreSQL on Neon.tech</h3>
+        <p>Go to <a href="https://neon.tech" target="_blank">neon.tech</a> → New Project → copy the connection string. It looks like:</p>
+        <div class="cmd-block"><span class="env-var">postgresql://user:pass@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require</span></div>
+        <p>Save this — you'll paste it in Render next.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Deploy Backend on Render.com</h3>
+        <p>Go to <a href="https://render.com" target="_blank">render.com</a> → New Web Service → connect your GitHub repo.</p>
+        <div class="cmd-block">Root Directory: <span class="env-var">backend</span>
+Build Command: <span class="env-var">pip install -r requirements.txt</span>
+Start Command: <span class="env-var">uvicorn main:app --host 0.0.0.0 --port $PORT</span>
+
+<span class="comment"># Environment Variables to add:</span>
+<span class="env-var">DATABASE_URL</span> = postgresql://... (paste Neon URL here)
+<span class="env-var">ALLOWED_ORIGINS</span> = https://your-app.vercel.app</div>
+        <p>After deploy, note your Render URL (e.g. <code>https://app-tracker-api.onrender.com</code>)</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Deploy Frontend on Vercel</h3>
+        <p>Go to <a href="https://vercel.com" target="_blank">vercel.com</a> → Import Git Repository → select your repo.</p>
+        <div class="cmd-block">Root Directory: <span class="env-var">frontend</span>
+Framework Preset: <span class="env-var">Vite</span>
+
+<span class="comment"># Environment Variable to add:</span>
+<span class="env-var">VITE_API_URL</span> = https://app-tracker-api.onrender.com</div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>Update CORS on Render</h3>
+        <p>After Vercel gives you your final URL (e.g. <code>https://app-tracker.vercel.app</code>), go back to Render → Environment → update <code>ALLOWED_ORIGINS</code> to match exactly.</p>
+        <div class="cmd-block"><span class="env-var">ALLOWED_ORIGINS</span> = https://app-tracker.vercel.app</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILE TREE -->
+  <section>
+    <div class="section-title">
+      <div class="icon">📁</div>
+      Project File Structure
+    </div>
+    <div class="file-tree">
+<span class="folder">app-tracker/</span>
+├── <span class="folder">backend/</span>
+│   ├── <span class="fixed-f">main.py</span>                    ← fixed (scheduler startup, CORS)
+│   ├── <span class="file">requirements.txt</span>
+│   ├── <span class="new">render.yaml</span>                ← NEW (deployment config)
+│   ├── <span class="new">.env.example</span>              ← NEW (template)
+│   └── <span class="folder">app/</span>
+│       ├── <span class="fixed-f">database.py</span>           ← fixed (MySQL→PostgreSQL, env var)
+│       ├── <span class="fixed-f">models.py</span>            ← fixed (sent_at nullable)
+│       ├── <span class="fixed-f">schemas.py</span>           ← fixed (sent_at default, ArchivedOut)
+│       ├── <span class="fixed-f">crud.py</span>              ← fixed (archive status, 404s)
+│       ├── <span class="fixed-f">scheduler.py</span>         ← fixed (correct model field)
+│       ├── <span class="file">enums.py</span>
+│       └── <span class="folder">routers/</span>
+│           └── <span class="fixed-f">application.py</span>   ← fixed (route ordering!)
+│
+└── <span class="folder">frontend/</span>
+    ├── <span class="new">.env.example</span>
+    └── <span class="folder">src/</span>
+        ├── <span class="fixed-f">App.jsx</span>              ← fixed (wired up all components)
+        └── <span class="folder">api/</span>
+            └── <span class="fixed-f">api.js</span>           ← fixed (missing exports, env var URL)
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+.btnAdd {
+  background: var(--brand-grad);
+  color: #fff; border: none;
+  border-radius: 8px; padding: 9px 18px;
+  font-size: 0.83rem; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: opacity 0.15s;
+  box-shadow: 0 2px 12px #1ab3d430;
+}
+.btnAdd:hover { opacity: 0.88; }
+
+.overlay {
+  position: fixed; inset: 0;
+  background: #00000099; z-index: 30;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  width: 480px; max-width: 95vw;
+  padding: 28px;
+  animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.modalTitle {
+  font-size: 1.05rem; font-weight: 800; margin-bottom: 4px;
+  background: var(--brand-grad);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.modalSub { font-size: 0.78rem; color: var(--text3); margin-bottom: 20px; }
+
+.error {
+  background: var(--red-bg); color: var(--red);
+  border: 1px solid #f8717130; border-radius: 8px;
+  padding: 8px 12px; font-size: 0.8rem; margin-bottom: 16px;
+}
+
+.formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+
+.label {
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+.input {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 8px; padding: 9px 12px;
+  color: var(--text); font-size: 0.85rem; outline: none;
+  transition: border-color 0.15s;
+}
+.input:focus { border-color: var(--accent); }
+.input option { background: var(--card); }
+
+.modalFooter { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+
+.btnGhost {
+  background: transparent; border: 1px solid var(--border2);
+  color: var(--text2); border-radius: 8px; padding: 9px 16px;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: color 0.15s;
+}
+.btnGhost:hover { color: var(--text); }
+
+.btnPrimary {
+  background: var(--brand-grad); color: #fff; border: none;
+  border-radius: 8px; padding: 9px 20px;
+  font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s;
+}
+.btnPrimary:hover { opacity: 0.87; }
+.btnPrimary:disabled { opacity: 0.45; cursor: not-allowed; }

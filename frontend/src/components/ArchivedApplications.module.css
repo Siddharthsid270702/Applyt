@@ -1,0 +1,76 @@
+.topbar {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex; align-items: center;
+  margin: 0 -28px;
+  position: sticky; top: 0; z-index: 5;
+}
+.pageTitle { font-size: 1.1rem; font-weight: 800; }
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 28px;
+}
+
+.panelHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.panelTitle { font-size: 0.88rem; font-weight: 700; }
+.count { font-size: 0.75rem; color: var(--text3); font-family: var(--mono); margin-left: auto; }
+
+.table { width: 100%; border-collapse: collapse; }
+.table th {
+  text-align: left;
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.84rem;
+  vertical-align: middle;
+}
+.row:last-child td { border-bottom: none; }
+
+.companyCell { display: flex; align-items: center; gap: 12px; }
+.coLogo {
+  width: 32px; height: 32px; min-width: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; color: #fff;
+}
+.coName { font-weight: 700; font-size: 0.87rem; opacity: 0.7; }
+.coRole { font-size: 0.75rem; color: var(--text2); margin-top: 1px; }
+
+.reasonTag {
+  font-size: 0.72rem; font-weight: 600;
+  padding: 3px 9px; border-radius: 10px;
+  font-family: var(--mono);
+}
+.rejected { background: var(--red-bg); color: var(--red); }
+.deleted  { background: var(--card2);  color: var(--text3); }
+
+.dateCell { font-size: 0.78rem; color: var(--text2); font-family: var(--mono); }
+
+.restoreBtn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem; font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border2);
+  background: var(--card2); color: var(--text2);
+  transition: all 0.15s;
+}
+.restoreBtn:hover { color: var(--brand-green); border-color: var(--brand-green); }
+
+.empty { text-align: center; padding: 40px; color: var(--text3); font-size: 0.85rem; }
+.emptyIcon { font-size: 2.5rem; margin-bottom: 10px; }

@@ -1,0 +1,59 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border2); }
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 70px; height: 70px;
+  border-radius: 0 12px 0 70px;
+  opacity: 0.1;
+}
+
+/* Use brand colors for total/active */
+.teal::before  { background: var(--brand-teal); }
+.green::before { background: var(--brand-green); }
+.yellow::before { background: var(--yellow); }
+.red::before   { background: var(--red); }
+
+.label {
+  font-size: 0.7rem; color: var(--text3);
+  font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 8px;
+}
+
+.value {
+  font-size: 2rem; font-weight: 800; font-family: var(--mono);
+}
+
+/* Brand gradient for main stat */
+.teal .value {
+  background: var(--brand-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.green .value  { color: var(--brand-green); }
+.yellow .value { color: var(--yellow); }
+.red .value    { color: var(--red); }
+
+.sub { font-size: 0.73rem; color: var(--text3); margin-top: 4px; }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}

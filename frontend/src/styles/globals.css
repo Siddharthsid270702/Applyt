@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* APPLYT brand palette — from logo */
+  --brand-teal:    #1ab3d4;
+  --brand-green:   #3dd68c;
+  --brand-navy:    #0d1b3e;
+  --brand-grad:    linear-gradient(135deg, #1ab3d4 0%, #3dd68c 100%);
+  --brand-grad-r:  linear-gradient(135deg, #3dd68c 0%, #1ab3d4 100%);
+
+  /* Dark UI */
+  --bg:     #0a0d14;
+  --panel:  #0f1320;
+  --card:   #161c2d;
+  --card2:  #1c2338;
+  --border: #1e2740;
+  --border2:#263050;
+
+  /* Accent = brand teal */
+  --accent:      #1ab3d4;
+  --accent-glow: #1ab3d415;
+  --accent2:     #3dd68c;
+
+  /* Status colours */
+  --green:      #3dd68c;
+  --green-bg:   #3dd68c15;
+  --yellow:     #fbbf24;
+  --yellow-bg:  #fbbf2415;
+  --red:        #f87171;
+  --red-bg:     #f8717115;
+  --blue:       #60a5fa;
+  --blue-bg:    #60a5fa15;
+  --purple:     #a78bfa;
+  --purple-bg:  #a78bfa15;
+
+  /* Text */
+  --text:  #e8edf5;
+  --text2: #8fa3c0;
+  --text3: #546480;
+
+  --mono: 'DM Mono', monospace;
+  --sans: 'Plus Jakarta Sans', sans-serif;
+  --radius: 12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+input, textarea, select, button { font-family: var(--sans); }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }

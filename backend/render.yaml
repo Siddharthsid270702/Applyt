@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: applyt-api
+    env: python
+    region: oregon          # pick whichever is closest to you
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      # ── Database (Neon) ────────────────────────────────────────────────────
+      - key: DATABASE_URL
+        sync: false
+        # Paste your Neon connection string from:
+        # Neon dashboard → your project → Connection Details → Connection string
+        # Format: postgresql+psycopg2://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
+
+      # ── CORS ──────────────────────────────────────────────────────────────
+      - key: ALLOWED_ORIGINS
+        sync: false
+        # Your Vercel frontend URL, e.g.: https://applyt.vercel.app
+
+      # ── Frontend URL (used in reminder emails) ─────────────────────────────
+      - key: FRONTEND_URL
+        sync: false
+        # Same as ALLOWED_ORIGINS, e.g.: https://applyt.vercel.app
+
+      # ── Firebase Admin SDK ─────────────────────────────────────────────────
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
+        # Paste entire contents of your Firebase service account JSON key (single line)
+
+      # ── Email Reminders (Gmail) ────────────────────────────────────────────
+      - key: GMAIL_SENDER
+        sync: false
+        # e.g.: your.email@gmail.com
+      - key: GMAIL_PASSWORD
+        sync: false
+        # Your 16-char Gmail App Password (NOT your real password)
