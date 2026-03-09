@@ -35,18 +35,6 @@ export default function Sidebar({ activeTab, onTabChange, appCount, archiveCount
         <span className={styles.navCount}>{archiveCount}</span>
       </div>
 
-      <div className={styles.navSection} style={{ marginTop: '8px' }}>Overview</div>
-
-      <div className={styles.navItem}>
-        <span className={styles.navIcon}>📊</span>
-        Analytics
-      </div>
-
-      <div className={styles.navItem}>
-        <span className={styles.navIcon}>🔔</span>
-        Follow-ups
-      </div>
-
       <div className={styles.sidebarFooter}>
         {user && (
           <div className={styles.userRow}>
@@ -59,12 +47,13 @@ export default function Sidebar({ activeTab, onTabChange, appCount, archiveCount
             )}
             <div className={styles.userInfo}>
               <span className={styles.userName}>{displayName}</span>
-<button
-  className={styles.logoutBtn}
-  onClick={() => { if (window.confirm('Are you sure you want to sign out?')) onLogout(); }}
->
-  Sign out
-</button>            </div>
+              <button
+                className={styles.logoutBtn}
+                onClick={() => { if (window.confirm('Are you sure you want to sign out?')) onLogout(); }}
+              >
+                Sign out
+              </button>
+            </div>
           </div>
         )}
         <div className={styles.footerBadge}>

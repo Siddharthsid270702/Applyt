@@ -8,9 +8,24 @@ from app.auth import get_current_user
 
 router = APIRouter(prefix="/applications", tags=["Applications"])
 
+# =======================
+# FOLLOW UPS — must be defined BEFORE /{app_id} routes
+# to avoid FastAPI matching "followups" as an app_id
+# =======================
+@router.put("/followups/{followup_id}/sent", response_model=schemas.FollowUpOut)
+def mark_followup_sent(
+    followup_id: int,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user)
+):
+    result = crud.mark_followup_sent(db, followup_id, user_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Follow-up not found")
+    return result
+
 
 # =======================
-# ARCHIVE
+# ARCHIVE — must be defined BEFORE /{app_id} routes
 # =======================
 @router.get("/archived", response_model=List[schemas.ArchivedApplicationOut])
 def archived_applications(
@@ -108,7 +123,7 @@ def list_notes(
 
 
 # =======================
-# FOLLOW UPS
+# FOLLOW UPS (per application)
 # =======================
 @router.post("/{app_id}/followups", response_model=schemas.FollowUpOut)
 def create_followup(
@@ -130,15 +145,3 @@ def list_followups(
     user_id: str = Depends(get_current_user)
 ):
     return crud.get_followups(db, app_id, user_id)
-
-
-@router.put("/followups/{followup_id}/sent", response_model=schemas.FollowUpOut)
-def mark_followup_sent(
-    followup_id: int,
-    db: Session = Depends(get_db),
-    user_id: str = Depends(get_current_user)
-):
-    result = crud.mark_followup_sent(db, followup_id, user_id)
-    if not result:
-        raise HTTPException(status_code=404, detail="Follow-up not found")
-    return result

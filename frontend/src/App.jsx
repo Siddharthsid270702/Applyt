@@ -9,14 +9,15 @@ import ApplicationForm      from './components/ApplicationForm';
 import DetailDrawer         from './components/DetailDrawer';
 import ArchivedApplications from './components/ArchivedApplications';
 import Login                from './components/Login';
+import { getApplications, deleteApplication, updateApplication, getArchivedApplications } from './api/api';
 
 import { useAuth } from './AuthContext';
 
-import {
-  getApplications,
-  deleteApplication,
-  updateApplication,
-} from './api/api';
+// import {
+//   getApplications,
+//   deleteApplication,
+//   updateApplication,
+// } from './api/api';
 
 export default function App() {
   const { user, logout } = useAuth();
@@ -38,6 +39,14 @@ export default function App() {
       .then(res => setApps(res.data || []))
       .catch(console.error);
   }, [refreshKey, user]);
+
+useEffect(() => {
+  if (!user) return;
+  getArchivedApplications()
+    .then(res => setArchiveCount(res.data?.length || 0))
+    .catch(console.error);
+}, [refreshKey, user]);
+  
 
   // ── Conditional renders AFTER all hooks ──────────────────────────────────
 
