@@ -1,10 +1,5 @@
-// src/firebase.js
-// ─────────────────────────────────────────────────────────────────────────────
-// All Firebase config values come from Vite env vars (prefix: VITE_).
-// Copy .env.example → .env and fill in your Firebase project's values.
-// ─────────────────────────────────────────────────────────────────────────────
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, PhoneAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
@@ -17,6 +12,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export const auth             = getAuth(app);
-export const googleProvider   = new GoogleAuthProvider();
-export const phoneProvider    = new PhoneAuthProvider(auth);
+export const auth = getAuth(app);
+
+export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: "select_account"
+});

@@ -1,15 +1,15 @@
 import os
 from dotenv import load_dotenv
-load_dotenv()
-
+load_dotenv()  
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, Base
-from app import models
+from app import models  
 from app.routers.application import router as application_router
 
-app = FastAPI(title="Applyt API")
+app = FastAPI(title="Application Tracker API")
+
 
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
@@ -24,11 +24,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create tables on startup
+
 Base.metadata.create_all(bind=engine)
+
+
+@app.on_event("startup")
+def startup_event():
+    from app.scheduler import start_scheduler
+    start_scheduler()
+
 
 app.include_router(application_router)
 
+
 @app.get("/")
 def root():
-    return {"message": "Applyt API running"}
+    return {"message": "Application Tracker running"}

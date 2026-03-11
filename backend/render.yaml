@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: applyt-api
+    env: python
+    region: oregon          
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+     
+      - key: DATABASE_URL
+        sync: false
+        
+
+      - key: ALLOWED_ORIGINS
+        sync: false
+
+      - key: FRONTEND_URL
+        sync: false
+
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
+
+      
+      - key: GMAIL_SENDER
+        sync: false
+        
+      - key: GMAIL_PASSWORD
+        sync: false
+        

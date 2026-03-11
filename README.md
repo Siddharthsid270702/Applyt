@@ -1,122 +1,109 @@
-# 📋 Job Application Tracker
+# Applyt — Job Application Tracker
 
-Full-stack job application tracker — FastAPI backend + React frontend.
+A full-stack web app to track your job applications, notes, and follow-ups.
+
+## Tech Stack
+
+- **Frontend** — React + Vite, hosted on Vercel
+- **Backend** — FastAPI (Python), hosted on Vercel Serverless
+- **Database** — Neon (PostgreSQL)
+- **Auth** — Firebase Authentication (Google Sign-in)
 
 ---
 
-## 🗂 Project Structure
+## Project Structure
 
 ```
 app-tracker/
-├── backend/          ← FastAPI + PostgreSQL
-│   ├── main.py
-│   ├── requirements.txt
-│   ├── .env                ← fill in your DB URL
-│   └── app/
-│       ├── database.py
-│       ├── models.py
-│       ├── schemas.py
-│       ├── crud.py
-│       ├── enums.py
-│       ├── scheduler.py
-│       └── routers/
-│           └── application.py
+├── frontend/          # React app
+│   ├── src/
+│   │   ├── components/
+│   │   ├── api/
+│   │   ├── App.jsx
+│   │   ├── AuthContext.jsx
+│   │   └── firebase.js
+│   ├── .env
+│   └── package.json
 │
-└── frontend/         ← React + Vite
-    ├── index.html
-    ├── package.json
-    ├── vite.config.js
-    ├── .env                ← set VITE_API_URL
-    └── src/
-        ├── main.jsx
-        ├── App.jsx
-        ├── App.module.css
-        ├── styles/
-        │   └── globals.css
-        ├── api/
-        │   └── api.js
-        └── components/
-            ├── Sidebar
-            ├── StatCards
-            ├── ApplicationList
-            ├── ApplicationForm
-            ├── DetailDrawer
-            ├── Notes
-            ├── Followups
-            ├── ArchivedApplications
-            └── StatusPill
+└── backend/           # FastAPI app
+    ├── app/
+    │   ├── routers/
+    │   ├── auth.py
+    │   ├── crud.py
+    │   ├── database.py
+    │   ├── models.py
+    │   └── schemas.py
+    ├── api/
+    │   └── index.py
+    ├── main.py
+    ├── vercel.json
+    ├── .env
+    └── requirements.txt
 ```
 
 ---
 
-## ⚡ Local Setup (MySQL via XAMPP)
+## Local Development
 
-### 1. Start XAMPP MySQL
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+- A [Neon](https://neon.tech) database
+- A [Firebase](https://console.firebase.google.com) project with Google Auth enabled
 
-1. Open **XAMPP Control Panel**
-2. Click **Start** next to **MySQL**
-3. Click **Admin** (or open `http://localhost/phpmyadmin`)
-4. Click **New** → type `application_tracker` → click **Create**
-
-### 2. Backend
+### Backend
 
 ```bash
-cd backend
-
-# Create virtual environment
+cd app-tracker/backend
 python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-
-# Install dependencies
+venv\Scripts\activate
 pip install -r requirements.txt
-
-# .env is already configured for XAMPP (no password needed by default)
-# If you have a MySQL password, edit backend/.env and add it
-
-# Run
 uvicorn main:app --reload
-# API at http://127.0.0.1:8000  |  Docs at http://127.0.0.1:8000/docs
 ```
 
-### 3. Frontend
+### Frontend
 
 ```bash
-cd frontend
+cd app-tracker/frontend
 npm install
 npm run dev
-# App at http://localhost:5173
 ```
 
 ---
 
-## ☁️ Free Online Deployment
+## Environment Variables
 
-| Layer     | Platform       | Free Tier                    |
-|-----------|----------------|------------------------------|
-| Database  | **Aiven.io**   | Free MySQL, 1 month trial → then use FreeSQLDatabase.com |
-| Backend   | **Render.com** | Free FastAPI hosting         |
-| Frontend  | **Vercel.com** | Free React/Vite hosting      |
+### Backend `.env`
 
-### Best Free MySQL Options Online
-
-| Service | Free Tier | How to get URL |
-|---|---|---|
-| **FreeSQLDatabase.com** | Free MySQL forever, 5MB | Sign up → instant credentials |
-| **Aiven.io** | 1 month free trial | New service → MySQL → copy URI |
-| **Railway.app** | $5 free credit/month | New project → MySQL → connect |
-| **PlanetScale** | Free hobby tier | New database → connect → copy URL |
-
-### Environment Variables for Production
-
-**Render (backend):**
-```
-DATABASE_URL = mysql+pymysql://user:pass@host:port/dbname?ssl-mode=REQUIRED
-ALLOWED_ORIGINS = https://your-app.vercel.app
+```env
+DATABASE_URL=postgresql+psycopg2://user:pass@ep-xxx.neon.tech/neondb?sslmode=require
+ALLOWED_ORIGINS=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
+FIREBASE_SERVICE_ACCOUNT_PATH=serviceAccountKey.json
+GMAIL_SENDER=your@gmail.com
+GMAIL_PASSWORD=your-app-password
 ```
 
-**Vercel (frontend):**
-```
-VITE_API_URL = https://your-api.onrender.com
+### Frontend `.env`
+
+```env
+VITE_API_URL=http://127.0.0.1:8000
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
 ```
 
-See `DEPLOYMENT_GUIDE.html` for full step-by-step instructions.
+---
+
+
+
+- Google Sign-in authentication
+- Each user sees only their own data
+- Add, update, and delete job applications
+- Track application status
+- Add notes per application
+- Schedule follow-up reminders
+- Archive and restore applications
